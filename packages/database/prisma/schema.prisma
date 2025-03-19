@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  profileImgLink String?
+  email          String?  @unique
+  name           String?
+  phone         String   @unique
+  password       String
+  isVerified     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  createdBy      String
+  modifiedAt     DateTime @updatedAt
+  modifiedBy     String
+  isDeleted      Boolean  @default(false)
+  UserRole       UserRole
+  restaurant     Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId   Int?
+  Subscription Subscription[]
+}
+
+model Restaurant {
+  id   Int    @id @default(autoincrement())
+  restaurantImagesLink   String[]
+  name String
+  about String?
+  phone String?
+  createdAt      DateTime @default(now())
+  createdBy      String
+  modifiedAt     DateTime @updatedAt
+  modifiedBy     String
+  isDeleted      Boolean  @default(false)
+  User User[]
+}
+
+
+model MenuItem {
+  id   Int    @id @default(autoincrement())
+  name String
+  category    FoodCategory
+  createdAt      DateTime @default(now())
+  createdBy      String
+  modifiedAt     DateTime @updatedAt
+  modifiedBy     String
+  isDeleted      Boolean  @default(false)
+}
+
+model Item {
+  id   Int    @id @default(autoincrement())
+  name String
+  price String
+  createdAt      DateTime @default(now())
+  createdBy      String
+  modifiedAt     DateTime @updatedAt
+  modifiedBy     String
+  isDeleted      Boolean  @default(false)
+}
+
+model Customer {
+  id               Int              @id @default(autoincrement())
+  name String
+  phone String
+  email String
+  createdAt      DateTime @default(now())
+  createdBy      String
+  modifiedAt     DateTime @updatedAt
+  modifiedBy     String
+  isDeleted      Boolean  @default(false)
+}
+
+
+model Subscription {
+  id               Int              @id @default(autoincrement())
+  userId           Int
+  subscriptionType SubscriptionType
+  startDate        DateTime         @default(now())
+  endDate          DateTime
+  amount           Float
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  createdBy        String
+  modifiedAt       DateTime         @updatedAt
+  modifiedBy       String
+  user             User             @relation(fields: [userId], references: [id])
+}
+
+
+enum FoodCategory {
+  STARTERS
+  MAIN_COURSE
+  DESSERTS
+  BEVERAGES
+}
+
+enum SubscriptionType {
+  MONTHLY
+  QUARTERLY
+  HALF_YEARLY
+  YEARLY
+}
+
+enum UserRole {
+  SUPERADMIN
+  RESTAURANTADMIN
+  CUSTOMER
+}
