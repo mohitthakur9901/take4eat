@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "scann_it",
   "private": true,
   "scripts": {
     "build": "turbo run build",
