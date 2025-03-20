@@ -1,0 +1,15 @@
+{
+  "name": "@repo/types",
+  "version": "1.0.0",
+  "description": "zod Schema",
+  "main": "index.js",
+
+  "author": "mohit",
+  "license": "ISC",
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "exports" :{
+    "./*" : "./src/index.ts"
+  }
+}
